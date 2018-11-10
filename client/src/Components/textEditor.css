@@ -1,0 +1,25 @@
+
+.ql-toolbar.ql-snow {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.ql-container.ql-snow {
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.textEditorArea{
+	margin-bottom: 50px;
+	height: 500px
+}
+
+.titleArea{
+	width: 100%;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	border-radius: 5px;
+}
+.ui.input>input{
+	border-color: #cccccc !important;
+}

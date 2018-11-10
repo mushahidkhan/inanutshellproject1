@@ -1,0 +1,27 @@
+.menuItem{
+	font-family: 'KoHo', sans-serif  !important;
+
+}
+
+
+.search{
+	width: 600px;
+}
+
+h3{
+	font-family: 'KoHo', sans-serif !important;
+}
+
+.menuClass{
+	    border-bottom: 1px solid #DDDDDD !important;
+	    margin-bottom: 10px !important;
+ 
+}
+
+.loginAndSignUp {
+	margin-top: 3px;
+}
+
+.userProfile{
+	border-radius: 100%;
+}
