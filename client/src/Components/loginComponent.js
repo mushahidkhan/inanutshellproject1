@@ -13,7 +13,6 @@ class LoginComponent extends Component {
 		axios.post('/login', {username: this.state.username, password: this.state.password})
  		 .then(response => {
  		 	if(response) {
- 		 		console.log("MUSHHAI " + response.data.posting)
 				this.props.history.push({
 				  pathname: '/',
 				  userInfo: response.data

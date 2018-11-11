@@ -23,6 +23,7 @@
     "draft-js": "^0.10.5",
     "draftjs-to-html": "^0.8.4",
     "express": "^4.16.2",
+    "express-current-version": "^0.1.4",
     "immutable": "^4.0.0-rc.12",
     "interweave": "^9.2.1",
     "jodit-react": "^1.0.17",

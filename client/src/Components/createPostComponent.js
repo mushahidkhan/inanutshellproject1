@@ -46,18 +46,32 @@ class CreatePostComponent extends Component {
  		} if(this.state.bookTitle.length == 0) {
  			alert("Please enter the book title")
  		} if(convertToRaw(this.state.postContent.getCurrentContent())["blocks"][0]["text"].length == 0) {
- 			alert("Please enter the book summary")
+ 			alert("Please enter the book summary")																					
  		} else {
-			axios.post('/postContent', {'headers' : {'authorization' : 'BEARER' + userInfo.token}}, {token: userInfo.token})
-			 		 .then(response => {
-			 		 	if(response) {
+ 			var postData = {
+ 				postTitle: this.state.postTitle, 
+				postContent: convertToRaw(this.state.postContent.getCurrentContent())["blocks"][0]["text"], 
+				bookTitle: this.state.bookTitle
+ 			}
+
+ 			var axiosConfig = {
+
+					'authorization' : 'BEARER ' + this.state.userInfo.token
+ 				
+ 			}
+			axios.post('/postContent', postData, {headers: axiosConfig}).then(response => {
+					console.log(response)
+ 			 		 	if(response) {
 							this.props.history.push({
 							  pathname: '/',
-							  userInfo: response.data
+							  userInfo: this.state.userInfo
+
 							})
 			 		 	}
 			     	}
-			  )
+			  ).catch(function (error) {
+    console.log(error.response);
+  });
 
  		}
  	}
