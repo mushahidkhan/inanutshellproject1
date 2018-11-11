@@ -30,7 +30,8 @@ class CreatePostComponent extends Component {
       postContent,
       bookSummaryTextLength: convertToRaw(postContent.getCurrentContent())["blocks"][0]["text"].length
     }); 
-  };
+    console.log(draftToHtml(convertToRaw(postContent.getCurrentContent())))
+   };
 
 	updatePostTitle = (e) => {
 		this.setState({postTitle: e.target.value})
@@ -48,11 +49,16 @@ class CreatePostComponent extends Component {
  		} if(convertToRaw(this.state.postContent.getCurrentContent())["blocks"][0]["text"].length == 0) {
  			alert("Please enter the book summary")																					
  		} else {
+ 			// var postContent = ""
+ 			// for(var i =0; i < convertToRaw(this.state.postContent.getCurrentContent()["blocks"].length; i++) {
+ 			// 	postContent +=  convertToRaw(this.state.postContent.getCurrentContent())["blocks"][i]["text"]
+ 			// }
  			var postData = {
  				postTitle: this.state.postTitle, 
-				postContent: convertToRaw(this.state.postContent.getCurrentContent())["blocks"][0]["text"], 
+				postContent: draftToHtml(convertToRaw(this.state.postContent.getCurrentContent())), 
 				bookTitle: this.state.bookTitle
  			}
+ 			 			console.log(postData.postContent)
 
  			var axiosConfig = {
 
@@ -100,10 +106,10 @@ class CreatePostComponent extends Component {
           editorClassName="demo-editor"
           onEditorStateChange={this.onEditorStateChange}
             toolbar={{
-            	    inline: {     options: ['bold', 'italic', 'underline', 'strikethrough']},
+            	    inline: {     options: ['bold', 'italic', 'underline']},
             	    list:{options: ['unordered', 'ordered']},
 
-    options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'emoji', 'history'],
+    options: ['inline', 'blockType', 'list', 'history'],
 
   }}
         />

@@ -43,9 +43,12 @@ app.post('/login', async (req, res) => {
   console.log("this is " + username);
   const account = await steem.api.getAccountsAsync([ username ])
   const pubKey = account[0].posting.key_auths[0][0]
-
+  var imageUrl = ""
   var a = account[0].json_metadata
-  const imageUrl = JSON.parse(account[0].json_metadata)['profile']['profile_image']
+//  if(JSON.parse(account[0].json_metadata)['profile']) {
+    imageUrl = JSON.parse(account[0].json_metadata)['profile']['profile_image']
+
+  //}//
  console.log(account)
   const { posting } = steem.auth.getPrivateKeys(username, password, ['posting'])
   const isValid = steem.auth.wifIsValid(posting, pubKey)
@@ -58,11 +61,9 @@ app.post('/login', async (req, res) => {
       firebase.database().ref('/users/' + username).once('value').then(function(snapshot) {
         if(!snapshot.val()) {
           firebase.database().ref('users').child(username).set({
-            username: {
               privatePostingKey: posting,
               latestPostPermlinkIdNumber: 0,
               likedPosts: ""
-            }
           });
         } 
       });
@@ -89,7 +90,7 @@ app.post('/postContent', verifyToken, (req, res) => {
         var postContent = req.body.postContent
         console.log(auth['username'] + " " + latestPostPermlinkIdNumber + " " + postTitle + postContent)
          steem.broadcast.comment(
-          privatePostingKey, "", auth['username'] + latestPostPermlinkIdNumber, auth['username'],"testinl" , postTitle, postContent, {}, (error, results) => {
+          privatePostingKey, "", "testjackedshady", auth['username'], auth['username'] + latestPostPermlinkIdNumber , postTitle, postContent, {}, (error, results) => {
             if(!error) {
               console.log(results)
             } else {
