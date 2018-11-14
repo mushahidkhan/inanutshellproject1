@@ -66,7 +66,7 @@ class CreatePostComponent extends Component {
  				
  			}
 			axios.post('/postContent', postData, {headers: axiosConfig}).then(response => {
-					console.log(response)
+					console.log("this is response: " +response)
  			 		 	if(response) {
 							this.props.history.push({
 							  pathname: '/',

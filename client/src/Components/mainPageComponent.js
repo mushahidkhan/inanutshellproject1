@@ -13,7 +13,7 @@ class MainPage extends Component {
 	}
 
 	componentDidMount() {
-		steem.api.getDiscussionsByCreated( { tag: 'testjackedshady', limit: 10 }, (error, results) => {
+		steem.api.getDiscussionsByCreated( { tag: 'manamhero', limit: 10 }, (error, results) => {
 		this.setState({posts: results})
 		console.log(results)
 	})

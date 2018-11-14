@@ -26,7 +26,6 @@ var secretWithDate = secret;
 const hmac = crypto.createHash('sha256').update(secretWithDate).digest('hex');
 
 function verifyToken(req, res, next) {
-  console.log(req.headers['authorization'])
   const bearerHeader = req.headers['authorization']
   if (typeof bearerHeader !== 'undefined') {
     const bearer = bearerHeader.split(' ')
@@ -40,47 +39,52 @@ function verifyToken(req, res, next) {
 app.post('/login', async (req, res) => {
   const username = req.body.username
   const password = req.body.password
-  console.log("this is " + username);
+  
   const account = await steem.api.getAccountsAsync([ username ])
-  const pubKey = account[0].posting.key_auths[0][0]
-  var imageUrl = ""
-  var a = account[0].json_metadata
-//  if(JSON.parse(account[0].json_metadata)['profile']) {
-    imageUrl = JSON.parse(account[0].json_metadata)['profile']['profile_image']
+  console.log(account)
 
-  //}//
- console.log(account)
+  if(account.length > 0) {
+    const pubKey = account[0].posting.key_auths[0][0]
+    var imageUrl = ""
+    var a = account[0].json_metadata
+    if(JSON.parse(account[0].json_metadata)['profile']) {
+      imageUrl = JSON.parse(account[0].json_metadata)['profile']['profile_image']
+
+    }
   const { posting } = steem.auth.getPrivateKeys(username, password, ['posting'])
   const isValid = steem.auth.wifIsValid(posting, pubKey)
   if (isValid) {
     jwt.sign({ username }, hmac, (err, token) => {
       if (err) {
-        console.log('error')
-        throw err 
-        }
-      firebase.database().ref('/users/' + username).once('value').then(function(snapshot) {
-        if(!snapshot.val()) {
-          firebase.database().ref('users').child(username).set({
-              privatePostingKey: posting,
-              latestPostPermlinkIdNumber: 0,
-              likedPosts: ""
-          });
-        } 
-      });
-       res.send({ token, posting, username, imageUrl
+          throw err 
+          }
+        firebase.database().ref('/users/' + username).once('value').then(function(snapshot) {
+          if(!snapshot.val()) {
+            firebase.database().ref('users').child(username).set({
+                privatePostingKey: posting,
+                latestPostPermlinkIdNumber: 0,
+                likedPosts: ""
+            });
+          } 
+        });
+         res.send({ token, posting, username, imageUrl
+        })
       })
-    })
 
-  } else {
-    res.sendStatus(403)
+    } else {
+      res.send({error: "Password incorrect. Please try again."})
+    }
   }
+
+  else {
+    res.send({error: "Username not found. Please try another username"})
+  }
+  
 })
 
 app.post('/postContent', verifyToken, (req, res) => {
-  console.log("in post " + req.body.postTitle)
    jwt.verify(req.token, hmac, (err, auth) => {
     if (err) { res.sendStatus(403, { err }) }
-      console.log(auth)
     firebase.database().ref('/users/' + auth['username']).once('value').then(function(snapshot) {
       if(snapshot.val()) {
         var privatePostingKey = snapshot.val().privatePostingKey
@@ -88,19 +92,23 @@ app.post('/postContent', verifyToken, (req, res) => {
         latestPostPermlinkIdNumber++
         var postTitle = req.body.postTitle
         var postContent = req.body.postContent
-        console.log(auth['username'] + " " + latestPostPermlinkIdNumber + " " + postTitle + postContent)
          steem.broadcast.comment(
-          privatePostingKey, "", "testjackedshady", auth['username'], auth['username'] + latestPostPermlinkIdNumber , postTitle, postContent, {}, (error, results) => {
+          privatePostingKey,
+          "",
+          "heroeshonds",
+          auth['username'], 
+          auth['username'] + "manamherozz12d3" , 
+          postTitle, 
+          postContent, {tags:["heroeshonds"]}, (error, results) => {
             if(!error) {
-              console.log(results)
+                res.json({ result: "success" })
             } else {
-              console.log(error)
+              res.json(error)
             }
           } 
         )
       } 
     });
-    res.json({ result: "success" })
   })
 })
 app.listen(3001, () => console.log('Listening on port 3001.'))
