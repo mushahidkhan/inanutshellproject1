@@ -7,9 +7,11 @@ import HomePage from './Components/mainPageComponent'
 import LoginComponent from './Components/loginComponent'
 import createPostComponent from './Components/createPostComponent'
 
+import test from './Components/Post/listOfPostsLook'
+
 import Post from './Components/Post/postComponent'
 
-const App = () => {
+ const App = () => {
 		return (
 			<BrowserRouter>
 				<div>

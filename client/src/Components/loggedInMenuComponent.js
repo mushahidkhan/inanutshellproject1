@@ -33,27 +33,41 @@ export default class LoggedInMenuComponent extends Component {
          </Menu.Item>
          </Link>
           
+          <Menu.Item  active={activeItem === 'allPosts'} onClick={this.handleItemClick}>
+           <p>All</p>
+        </Menu.Item>
+
+         <Menu.Item  active={activeItem === 'allPosts'} onClick={this.handleItemClick}>
+           <p>Trending</p>
+        </Menu.Item>
+   
+     <Menu.Item  active={activeItem === 'allPosts'} onClick={this.handleItemClick}>
+          <p> New</p>
+        </Menu.Item>
+
+            <Menu.Item  active={activeItem === 'allPosts'} onClick={this.handleItemClick}>
+          <p> Hot</p>
+        </Menu.Item>
+
           <Menu.Item className="search">
             <Input className='icon'icon='search' placeholder='Search...' />
            </Menu.Item>
 
            <Link to={newTo} className="loginAndSignUp" params={{ userInfo: this.state.userInfo }}> 
        <Menu.Item active={activeItem === 'writeAboutABook'} onClick={this.handleItemClick} >
-
-
-           Write About a Book
+          <p> Write About a Book</p>
           </Menu.Item>
         </Link>
 
        <Link to="/profile" className="loginAndSignUp"> 
        <Menu.Item active={activeItem === 'profile'} onClick={this.handleItemClick}>
-        {this.state.userInfo.username}
+        <p>{this.state.userInfo.username}</p>
         </Menu.Item>
         </Link>
 
        <Link to="/" className="loginAndSignUp"> 
        <Menu.Item  active={activeItem === 'logout'} onClick={this.handleItemClick}>
-           Log out
+           <p>Log out</p>
         </Menu.Item>
         </Link>	
       </Menu>

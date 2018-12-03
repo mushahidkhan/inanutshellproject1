@@ -1,81 +1,79 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import HeaderComponent from './headerComponent'
-import { Grid, Dropdown, Button } from 'semantic-ui-react'
+import { Grid, Dropdown, Button, Input, Label, Menu } from 'semantic-ui-react'
 import "./mainPageComponent.css"
 import steem from 'steem'
-
+import ListOfPostsLook from './Post/listOfPostsLook'
+import './mainPageComponent.css'
 
  
 class MainPage extends Component {
 	state = {
-		posts: []
+		 genrePicked:'1',
+		 filterPicked: '1',
+		 genreOptions : [
+		  { key: 1, text: 'All Content', value: 1 },
+		  { key: 2, text: 'Enterpreneurshup & Business', value: 2 },
+		  { key: 3, text: 'Finance', value: 3 },
+		  { key: 4, text: 'Health & Fitness', value: 4},
+		  { key: 5, text: 'Leadership', value: 5 },
+		  { key: 6, text: 'Religion', value: 6 },
+		  { key: 7, text: 'Fiction', value: 7 }
+		],
+
+		filterOptions : [
+		  { key: 1, text: 'New', value: 1 },
+		  { key: 2, text: 'Trending', value: 2 },
+		  { key: 3, text: 'Hot', value: 3 }
+		]
+
 	}
 
-	componentDidMount() {
-		steem.api.getDiscussionsByCreated( { tag: 'manamhero', limit: 10 }, (error, results) => {
-		this.setState({posts: results})
-		console.log(results)
-	})
-}
-	
-	getNextTenPosts = () => {
-console.log(this.state.posts)
-		steem.api.getDiscussionsByCreated({
-			tag:'testinl', 
-			limit:10, 
-			start_author:this.state.posts[this.state.posts.length - 1].author,
-			start_permlink: this.state.posts[this.state.posts.length - 1].permlink 
-		}, (error2, results2) => {
-			results2.shift();
-			this.setState({posts: [...this.state.posts,...results2]}, () => {
-				console.log(this.state.posts)
-			})
-		})
-	}
-
-state={
- options : [
-  { key: 1, text: 'All Content', value: 1 },
-  { key: 2, text: 'Enterpreneurshup & Business', value: 2 },
-  { key: 3, text: 'Finance', value: 3 },
-  { key: 4, text: 'Health & Fitness', value: 4},
-  { key: 5, text: 'Leadership', value: 5 },
-  { key: 6, text: 'Religion', value: 6 },
-  { key: 7, text: 'Fiction', value: 7 }
-]
-}
  componentWillMount() {
  	if(this.props.location.state) {
- 		this.state.userInfo=this.props.location.userInfo
+ 		this.state.userInfo = this.props.location.userInfo
  	}
- }
+ 		if(this.props.location.activeItem){
+ 	 		console.log(this.props)		
+ 		}
+  }
+	
+	 onFilterChange = (n, e) => {
+	 	console.log(e.value)
+	 	this.setState({ filterPicked: e.value}); 
+	 }
 
- 
+	 onGenreChange = (n, e) => {
+	 	this.setState({ genrePicked: e.value}); 
+	 	console.log(this.state.genrePicked)
+	 }
+
 	render() {
-		console.log(this.props.location.userInfo);
+
 		return (
 			<div>
-				<HeaderComponent userInfo={this.props.location.userInfo} />
-				   <Grid stackable>
-				   <Grid.Row></Grid.Row>
-				   <Grid.Row>
-					    <Grid.Column width={6}></Grid.Column>
-					    <Grid.Column width={1}><p>Hot</p></Grid.Column>
-					    <Grid.Column width={1}><p>New</p></Grid.Column>
-					    <Grid.Column width={1}><p>Trending</p></Grid.Column>
-					    <Grid.Column width={1}></Grid.Column>
-					    <Grid.Column width={3}>
-		  				<Dropdown className="dropdown" defaultValue={this.state.options[0].value} inline options={this.state.options} />
+			<HeaderComponent userInfo={this.props.location.userInfo} />
+			<div className="mainPage">
+			  <Grid stackable>
+			    <Grid.Row columns={7}>
+			      <Grid.Column >
+	      			<Dropdown onChange={this.onFilterChange} defaultValue={this.state.filterOptions[0].value} search selection options={this.state.filterOptions} className="filterOptions"/>
+			      </Grid.Column>
+			      <Grid.Column>
+      				<Dropdown onChange={this.onGenreChange} defaultValue={this.state.genreOptions[0].value} search selection options={this.state.genreOptions} className="options"/>
+			      </Grid.Column>
+			    </Grid.Row>
+			    <Grid.Row >
+			      <Grid.Column>
+					 	<ListOfPostsLook genrePicked={this.state.genrePicked} filterPicked={this.state.filterPicked}/>
+			      </Grid.Column>
+			    </Grid.Row>
+			  </Grid>
 
-					    </Grid.Column>
-				   </Grid.Row>
-				   <Grid.Row>
-				   	<Button onClick={this.getNextTenPosts}>Click Here</Button>
+				</div>
+			 </div>
 
-				   </Grid.Row>
-				  </Grid>
-            </div>
 		)
 	}
 }

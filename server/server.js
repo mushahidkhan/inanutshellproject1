@@ -89,19 +89,20 @@ app.post('/postContent', verifyToken, (req, res) => {
       if(snapshot.val()) {
         var privatePostingKey = snapshot.val().privatePostingKey
         var latestPostPermlinkIdNumber = snapshot.val().latestPostPermlinkIdNumber
-        latestPostPermlinkIdNumber++
         var postTitle = req.body.postTitle
         var postContent = req.body.postContent
+        var bookTitle = req.body.bookTitle
          steem.broadcast.comment(
           privatePostingKey,
           "",
-          "heroeshonds",
+          "inANSTest",
           auth['username'], 
-          auth['username'] + "manamherozz12d3" , 
+          auth['username'] + postTitle, 
           postTitle, 
-          postContent, {tags:["heroeshonds"]}, (error, results) => {
+          postContent, {tags:["inANSTest", bookTitle]}, (error, results) => {
+            console.log(results)
             if(!error) {
-                res.json({ result: "success" })
+              res.json({ result: "success" })
             } else {
               res.json(error)
             }

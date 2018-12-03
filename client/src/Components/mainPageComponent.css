@@ -1,16 +1,16 @@
-.tagsTitleRow{
-	text-align: center;
-	margin-bottom: 20px;
+
+
+.postsArea {
+	padding-right: 10px;
 }
 
-.tagName{
-	text-align: center;
-	margin-bottom: 10px;
+.filterOptions{
+	margin-left: 5px;
+	width: inherit;
 }
 
-h4{
-	font-family: 'KoHo', sans-serif !important;
+.options{
+	margin-left: 5px;
+	width: inherit;
 
 }
-
- 

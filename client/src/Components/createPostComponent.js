@@ -12,6 +12,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 
 class CreatePostComponent extends Component {
  
@@ -58,7 +59,6 @@ class CreatePostComponent extends Component {
 				postContent: draftToHtml(convertToRaw(this.state.postContent.getCurrentContent())), 
 				bookTitle: this.state.bookTitle
  			}
- 			 			console.log(postData.postContent)
 
  			var axiosConfig = {
 
@@ -66,7 +66,7 @@ class CreatePostComponent extends Component {
  				
  			}
 			axios.post('/postContent', postData, {headers: axiosConfig}).then(response => {
-					console.log("this is response: " +response)
+					console.log("this is response: " + response)
  			 		 	if(response) {
 							this.props.history.push({
 							  pathname: '/',
@@ -76,7 +76,6 @@ class CreatePostComponent extends Component {
 			 		 	}
 			     	}
 			  ).catch(function (error) {
-    console.log(error.response);
   });
 
  		}

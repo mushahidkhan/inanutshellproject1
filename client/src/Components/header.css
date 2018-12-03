@@ -1,20 +1,19 @@
 .menuItem{
-	font-family: 'KoHo', sans-serif  !important;
-
+	font-family: 'Quicksand', sans-serif;
 }
 
 
 .search{
-	width: 600px;
+	width: 500px;
 }
 
 h3{
-	font-family: 'KoHo', sans-serif !important;
+	font-family: 'Quicksand', sans-serif;
 }
 
 .menuClass{
 	    border-bottom: 1px solid #DDDDDD !important;
-	    margin-bottom: 10px !important;
+	    margin-bottom: 12px !important;
  
 }
 
@@ -24,4 +23,13 @@ h3{
 
 .userProfile{
 	border-radius: 100%;
+}
+
+p{
+	font-family: 'Quicksand', sans-serif;
+}
+
+.active{
+	text-decoration: underline !important;
+	background: white !important;
 }
