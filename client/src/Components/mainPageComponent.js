@@ -14,7 +14,7 @@ class MainPage extends Component {
 		 filterPicked: '1',
 		 genreOptions : [
 		  { key: 1, text: 'All Content', value: 1 },
-		  { key: 2, text: 'Enterpreneurshup & Business', value: 2 },
+		  { key: 2, text: 'Business', value: 2 },
 		  { key: 3, text: 'Finance', value: 3 },
 		  { key: 4, text: 'Health & Fitness', value: 4},
 		  { key: 5, text: 'Leadership', value: 5 },
@@ -56,17 +56,14 @@ class MainPage extends Component {
 			<HeaderComponent userInfo={this.props.location.userInfo} />
 			<div className="mainPage">
 			  <Grid stackable>
-			    <Grid.Row columns={7}>
-			      <Grid.Column >
-	      			<Dropdown onChange={this.onFilterChange} defaultValue={this.state.filterOptions[0].value} search selection options={this.state.filterOptions} className="filterOptions"/>
-			      </Grid.Column>
+			    <Grid.Row columns={3}>
 			      <Grid.Column>
       				<Dropdown onChange={this.onGenreChange} defaultValue={this.state.genreOptions[0].value} search selection options={this.state.genreOptions} className="options"/>
 			      </Grid.Column>
 			    </Grid.Row>
 			    <Grid.Row >
 			      <Grid.Column>
-					 	<ListOfPostsLook genrePicked={this.state.genrePicked} filterPicked={this.state.filterPicked}/>
+					 	<ListOfPostsLook genrePicked={this.state.genrePicked}/>
 			      </Grid.Column>
 			    </Grid.Row>
 			  </Grid>

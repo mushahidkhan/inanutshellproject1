@@ -12,22 +12,10 @@ class ListOfPostsLook extends Component {
  
  	state = {
  		posts: [],
+ 		postsToDisplay: [],
 		prevNumberOfPosts: 0,
 		postsObj: {},
-		filter: this.props.filterPicked,
-		genre: this.props.genrePicked
- 	}
-
- 	getPostsByCreated(){
-
- 	}
-
- 	getPostsByTrending(){
-
- 	}
-
- 	getPostsByHot(){
-
+		genre: 'All Content',
  	}
 
  	getPostsByGenre(){
@@ -35,9 +23,10 @@ class ListOfPostsLook extends Component {
  	}
 
 	componentDidMount() {
-		console.log("*******")
-		console.log(this.state.filter)
-		steem.api.getDiscussionsByCreated( { tag: 'mushlearn', limit: 10 }, (err, results) => {
+		if(this.props.genrePicked) {
+			this.state.genre = this.props.genrePicked;
+		}
+		steem.api.getDiscussionsByCreated( { tag: 'mushposts', limit: 10 }, (err, results) => {
 			if(!err) {
 				this.setState({posts: results, prevNumberOfPosts: results.length})
 				var postsObj = {};
@@ -56,6 +45,8 @@ class ListOfPostsLook extends Component {
 	 	  						}
 
 		 	  					this.setState({ postsObj })
+		 	  					this.setState({ postsToDisplay: this.state.posts})
+
 	 	  					}
 
 		  				}
@@ -64,49 +55,72 @@ class ListOfPostsLook extends Component {
 
  			}
 			}
-			
-			//this.setState({ posts: postsWithImageUrl})
-
  		})
  
 
  	}
 
-	getNextTenPosts = () => {
-	steem.api.getDiscussionsByCreated({
-		tag: 'mushlearn', 
-		limit: 10, 
-		start_author: this.state.posts[this.state.posts.length - 1].author,
-		start_permlink: this.state.posts[this.state.posts.length - 1].permlink 
-	}, (error2, results2) => {
-		results2.shift();
-		this.setState({posts: [...this.state.posts,...results2]}, () => {
-			if(this.state.posts.length > this.state.prevNumberOfPosts) {
-				this.setState({prevNumberOfPosts: this.state.posts.length})
-						var postsWithImageUrl = [];
-			for(var i = 0; i< this.state.posts.length; i++) {
-				var elem = this.state.posts[i];
-				steem.api.getAccounts([elem['author']], (err, result) => {
-					if(JSON.parse(result[0].json_metadata)['profile']) {
-					elem['imageUrl'] = (JSON.parse(result[0]["json_metadata"])).profile.profile_image;
-					postsWithImageUrl.push(elem);					
-					}
-
-			    });		
-		    this.setState({ posts: postsWithImageUrl})
-			}	
+getPostsByFilter() {
+	if(this.state.genre == 'All Content') {
+		this.state.postsToDisplay = this.state.posts;
+	} else {
+		for(var post of this.sate.posts) {
+			var json_metadata = JSON.parse(post['json_metadata']);
+			var tags = json_metadata['tags']
+			var postGenre = tags[1];
+			if(this.state.genre == postGenre) {
+				this.state.postsToDisplay.push(post);
 			}
-		})
-	})
-
+		}
+	}
 }
+   componentWillReceiveProps(newProps) {
+   	console.log(newProps)
+   	var genrePicked;
+   	switch(newProps.genrePicked) {
+   		case 2:
+   			genrePicked = 'leadershiplearns';
+   			break;
+   		case 3:
+   			genrePicked = 'fieldoftechnology';
+   			break;
+   		case 4:
+   			genrePicked = 'genderpaygap';
+   			break;
+   		case 5:
+   			genrePicked = 'psychologylearningbymush';
+   			break;
+   		case 6:
+   			genrePicked = 'Religion';
+   			break;
+   		case 7:
+   			genrePicked = 'Fiction';
+   			break;
+   		default:
+   			genrePicked = 'All';
+   	}
+   		if(genrePicked == 'All') {
+   			this.setState({postsToDisplay: this.state.posts})
+   			return;
+   		}
+   		var postsToDisplay = [];    
+		for(var post of this.state.posts) {
+			var json_metadata = JSON.parse(post['json_metadata']);
+			var tags = json_metadata['tags']
+			var postGenre = tags[1];
+			if(postGenre == genrePicked) {
+				postsToDisplay.push(post);
+			}
+		}
+		this.setState({postsToDisplay: postsToDisplay})
+	
+   }
 
 	render() {
-		console.log("inrender")
 		return (
 			<div className="listOfPosts">
 				<Feed>
-				{this.state.posts.map((elem, i) => {
+				{this.state.postsToDisplay.map((elem, i) => {
 					var body = elem['posts'];
 					var imageUrl = "";
 
