@@ -27,16 +27,13 @@ class MainPage extends Component {
 		  { key: 2, text: 'Trending', value: 2 },
 		  { key: 3, text: 'Hot', value: 3 }
 		]
-
 	}
 
  componentWillMount() {
  	if(this.props.location.state) {
  		this.state.userInfo = this.props.location.userInfo
+ 		console.log(this.state.userInfo)
  	}
- 		if(this.props.location.activeItem){
- 	 		console.log(this.props)		
- 		}
   }
 	
 	 onFilterChange = (n, e) => {
@@ -63,7 +60,7 @@ class MainPage extends Component {
 			    </Grid.Row>
 			    <Grid.Row >
 			      <Grid.Column>
-					 	<ListOfPostsLook genrePicked={this.state.genrePicked}/>
+					 	<ListOfPostsLook userInfo={this.props.location.userInfo} genrePicked={this.state.genrePicked}/>
 			      </Grid.Column>
 			    </Grid.Row>
 			  </Grid>

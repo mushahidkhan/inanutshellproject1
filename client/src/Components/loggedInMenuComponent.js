@@ -15,10 +15,10 @@ export default class LoggedInMenuComponent extends Component {
   }
 
   render() {
-    const newTo = { 
-  pathname: "/createPost", 
-  userInfo: this.state.userInfo
-};
+    const newPost = { 
+      pathname: "/createPost", 
+      userInfo: this.state.userInfo
+    };
 
    const home = { 
   pathname: "/", 
@@ -32,28 +32,12 @@ export default class LoggedInMenuComponent extends Component {
           <h3  className="menuItem" >In A Nutshell</h3>
          </Menu.Item>
          </Link>
-          
-          <Menu.Item  active={activeItem === 'allPosts'} onClick={this.handleItemClick}>
-           <p>All</p>
-        </Menu.Item>
-
-         <Menu.Item  active={activeItem === 'allPosts'} onClick={this.handleItemClick}>
-           <p>Trending</p>
-        </Menu.Item>
-   
-     <Menu.Item  active={activeItem === 'allPosts'} onClick={this.handleItemClick}>
-          <p> New</p>
-        </Menu.Item>
-
-            <Menu.Item  active={activeItem === 'allPosts'} onClick={this.handleItemClick}>
-          <p> Hot</p>
-        </Menu.Item>
 
           <Menu.Item className="search">
             <Input className='icon'icon='search' placeholder='Search...' />
            </Menu.Item>
 
-           <Link to={newTo} className="loginAndSignUp" params={{ userInfo: this.state.userInfo }}> 
+           <Link to={newPost} className="loginAndSignUp"> 
        <Menu.Item active={activeItem === 'writeAboutABook'} onClick={this.handleItemClick} >
           <p> Write About a Book</p>
           </Menu.Item>

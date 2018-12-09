@@ -6,6 +6,7 @@ import 'semantic-ui-css/semantic.min.css';
 import HomePage from './Components/mainPageComponent'
 import LoginComponent from './Components/loginComponent'
 import createPostComponent from './Components/createPostComponent'
+import PostPage from './Components/Post/postPage'
 
 import test from './Components/Post/listOfPostsLook'
 
@@ -18,6 +19,7 @@ import Post from './Components/Post/postComponent'
  					<Route path="/" exact component = {HomePage}/>
  					<Route path="/login" component = {LoginComponent}/>
  					<Route path="/createPost" component = {createPostComponent}/>
+ 					<Route path="/post/:author/:permLink" component = {PostPage}/>
 
 				</div>
 			</BrowserRouter>

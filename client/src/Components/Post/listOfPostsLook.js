@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios';
 import { Feed, Icon } from 'semantic-ui-react';
 import steem from 'steem'
@@ -17,13 +18,14 @@ class ListOfPostsLook extends Component {
 		prevNumberOfPosts: 0,
 		postsObj: {},
 		open: true,
-		genre: 'mushposts'
+		genre: 'mushposts',
+		userInfo: this.props.userInfo,
+		genreToShow:''
  	}
 
  	getPostsByGenre = (genre) => {
  		steem.api.getDiscussionsByCreated( { tag: genre, limit: 6 }, (err, results) => {
 			if(!err) {
-				console.log(results)
 				this.setState({posts: results, prevNumberOfPosts: results.length})
 				var postsObj = {};
 				if(this.state.posts['created']){
@@ -73,16 +75,42 @@ class ListOfPostsLook extends Component {
 		this.getPostsByGenre("mushposts")
  	}
 
+ 	getGenre(genreCoded) {
+ 		var genrePicked;
+ 		switch(genreCoded) {
+		   		case 'leadershiplearns':
+		   			genrePicked = 'business';
+		   			break;
+		   		case 'fieldoftechnology':
+		   			genrePicked = 'finance';
+		   			break;
+		   		case 'genderpaygap':
+		   			genrePicked = 'health & fitness';
+		   			break;
+		   		case 'psychologylearningbymush':
+		   			genrePicked = 'leadership';
+		   			break;
+		   		case 'Religion':
+		   			genrePicked = 'religion';
+		   			break;
+		   		case 'Fiction':
+		   			genrePicked = 'fiction';
+		   			break;
+		   		
+		   	}
+		   	return genrePicked;
+ 	}
+
   handleRef = node => this.setState({ node })
 
 componentWillReceiveProps(newProps) {
 	this.setState({ open: true})
    	var genrePicked;
-   	console.log(newProps)
    	switch(newProps.genrePicked) {
    		//some unique genre keys will have to be picked
    		case 2:
    			genrePicked = 'leadershiplearns';
+
    			break;
    		case 3:
    			genrePicked = 'fieldoftechnology';
@@ -113,6 +141,12 @@ componentWillReceiveProps(newProps) {
 			<div className="listOfPosts">
 				<Feed>
 				{this.state.posts.map((elem, i) => {
+					console.log(elem)
+
+				const postPage = { 
+				  pathname: "/" + "post/" +elem['author'] + "/" + elem['permlink'], 
+				  userInfo: this.state.userInfo
+				};
 					var body = elem['posts'];
 					var imageUrl = "";
 
@@ -132,24 +166,24 @@ componentWillReceiveProps(newProps) {
 					      </Feed.Label>
 					      <Feed.Content>
 					        <Feed.Summary>
-					          <h4>{elem['author']}</h4> 
-					        </Feed.Summary>
-					        <Feed.Extra text className="contentParent">
-					          	<h3>{elem['root_title']}</h3>
-					        	<p className="postBody">{ReactHtmlParser(elem['body'].slice(0, 400) + "...") }</p>
-			     		   <Feed.Date><p>Posted { time }</p></Feed.Date>
-					        </Feed.Extra>
-					      </Feed.Content>
+					          <h4>{elem['author']}<span className="timeFromNow">&nbsp; in {this.getGenre(JSON.parse(elem['json_metadata'])['tags'][1])} &nbsp;•&nbsp; { time }</span></h4> 
 
-					    </Feed.Event>	
+					        </Feed.Summary>
+					       	<Link to={postPage}>
+						        <Feed.Extra text className="contentParent">
+						          	<h3>{elem['root_title']}</h3>
+						        	<p className="postBody">{ReactHtmlParser(elem['body'].slice(0, 400) + "...") }</p>
+						        </Feed.Extra>
+					        </Link>	
+					      </Feed.Content>
+					    </Feed.Event>
 					 	)
 				})}		
 				</Feed>
 					{this.state.open? <Button primary attached='bottom' className="morePosts" onClick={this.loadMorePosts}>More Posts</Button> : <h3 className="noMorePosts">No More Posts</h3>}
 
-		</div>
-	)
-	
-}
+			</div>
+		)
+	}
 }
 export default ListOfPostsLook;

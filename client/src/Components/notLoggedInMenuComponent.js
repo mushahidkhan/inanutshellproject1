@@ -21,7 +21,7 @@ export default class NotLoggedInMenuComponent extends Component {
     return (
     	<div>
     	<Menu stackable  secondary className="menuClass">
-         <Link to="/" params={{ activeItem: "new" }}>
+         <Link to="/">
            <Menu.Item  className="logoMenuItem">
             <h3 >In A Nutshell</h3>
            </Menu.Item>
@@ -36,11 +36,6 @@ export default class NotLoggedInMenuComponent extends Component {
           <Menu.Item className="search">
             <Input className='icon'icon='search' placeholder='Search...' />
            </Menu.Item>
-
-           
-   
-           
-
 
        <Link to="/login" className="loginAndSignUp"> 
        <Menu.Item name='login' className="itema" active={activeItem === 'login'} onClick={this.handleItemClick}>

@@ -28,6 +28,7 @@
 }
 .contentParent{
 	max-width: 90% !important;
+	color:black;
   }
 
 h3{
@@ -43,6 +44,49 @@ p{
 
 }
 
+.postBody{
+	color:black !important;
+}
+
+.postTitle{
+	margin-bottom: 10px !important;
+	font-size: 40px;
+				font-family: 'Quicksand', sans-serif;
+
+}
+
+.timeFromNow{
+	color: #788187;
+	font-size: 13px !important;
+}
 .noMorePosts{
 	text-align: center;
+}
+
+.postInfo{
+	font-size: 20px;
+			font-family: 'Quicksand', sans-serif;
+
+
+
+}
+
+.postAuthorImage{
+	margin-right: 10px;
+
+}
+
+.postGenre{
+	color:#788187;
+			font-family: 'Quicksand', sans-serif;
+}
+
+.postTimeFromNow{
+	color: #788187;
+		font-family: 'Quicksand', sans-serif;
+
+}
+
+.dot{
+	font-size: 15px;
 }
