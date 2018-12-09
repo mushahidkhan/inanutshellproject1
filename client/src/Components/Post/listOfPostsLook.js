@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import { Feed, Icon } from 'semantic-ui-react';
 import steem from 'steem'
-import { Grid, Dropdown, Button, Divider } from 'semantic-ui-react'
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { Grid, Dropdown, Button, Divider, Popup } from 'semantic-ui-react'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import './post.css'
 import MainPageFilterOfPosts from '../mainPageFiltersOfPosts'
@@ -15,19 +16,14 @@ class ListOfPostsLook extends Component {
  		postsToDisplay: [],
 		prevNumberOfPosts: 0,
 		postsObj: {},
-		genre: 'All Content',
+		open: true,
+		genre: 'mushposts'
  	}
 
- 	getPostsByGenre(){
-
- 	}
-
-	componentDidMount() {
-		if(this.props.genrePicked) {
-			this.state.genre = this.props.genrePicked;
-		}
-		steem.api.getDiscussionsByCreated( { tag: 'mushposts', limit: 10 }, (err, results) => {
+ 	getPostsByGenre = (genre) => {
+ 		steem.api.getDiscussionsByCreated( { tag: genre, limit: 6 }, (err, results) => {
 			if(!err) {
+				console.log(results)
 				this.setState({posts: results, prevNumberOfPosts: results.length})
 				var postsObj = {};
 				if(this.state.posts['created']){
@@ -35,18 +31,16 @@ class ListOfPostsLook extends Component {
 				}
 	 			for(var elem of this.state.posts) {
 	 				var author = elem['author']
-		  			steem.api.getAccounts([author], (err, res)=> {
+		  			steem.api.getAccounts([author], (err, res) => {
 	 	  				if(!err) {
 	 	  					if(res[0].json_metadata) {
-	 	  					 	if(JSON.parse(res[0].json_metadata)['profile']['profile_image']) {
+	 	  					 	if(JSON.parse(res[0].json_metadata)['profile']) {
 	 	  						 	postsObj[res[0]['name']]  = JSON.parse(res[0].json_metadata)['profile']['profile_image']
 	 	  						} else {
-	 	  				 	  		postsObj[res[0]['name']] = ""
+	 	  				 	  		postsObj[res[0]['name']] = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2000px-Circle-icons-profile.svg.png"
 	 	  						}
 
 		 	  					this.setState({ postsObj })
-		 	  					this.setState({ postsToDisplay: this.state.posts})
-
 	 	  					}
 
 		  				}
@@ -56,28 +50,37 @@ class ListOfPostsLook extends Component {
  			}
 			}
  		})
- 
-
  	}
 
-getPostsByFilter() {
-	if(this.state.genre == 'All Content') {
-		this.state.postsToDisplay = this.state.posts;
-	} else {
-		for(var post of this.sate.posts) {
-			var json_metadata = JSON.parse(post['json_metadata']);
-			var tags = json_metadata['tags']
-			var postGenre = tags[1];
-			if(this.state.genre == postGenre) {
-				this.state.postsToDisplay.push(post);
+ 	loadMorePosts = () => {
+		steem.api.getDiscussionsByCreated({
+			tag: this.state.genre, 
+			limit:6, 
+			start_author:this.state.posts[this.state.posts.length - 1].author,
+			start_permlink: this.state.posts[this.state.posts.length - 1].permlink 
+		}, (error2, results2) => {
+			results2.shift();
+			if(results2.length == 0) {
+				console.log("no more")
+				this.setState({ open: false})
 			}
-		}
+			this.setState({posts: [...this.state.posts,...results2]}, () => {
+			})
+		})
 	}
-}
-   componentWillReceiveProps(newProps) {
-   	console.log(newProps)
+
+	componentDidMount() {
+		this.getPostsByGenre("mushposts")
+ 	}
+
+  handleRef = node => this.setState({ node })
+
+componentWillReceiveProps(newProps) {
+	this.setState({ open: true})
    	var genrePicked;
+   	console.log(newProps)
    	switch(newProps.genrePicked) {
+   		//some unique genre keys will have to be picked
    		case 2:
    			genrePicked = 'leadershiplearns';
    			break;
@@ -97,30 +100,19 @@ getPostsByFilter() {
    			genrePicked = 'Fiction';
    			break;
    		default:
-   			genrePicked = 'All';
+   			genrePicked = 'mushposts';
    	}
-   		if(genrePicked == 'All') {
-   			this.setState({postsToDisplay: this.state.posts})
-   			return;
-   		}
-   		var postsToDisplay = [];    
-		for(var post of this.state.posts) {
-			var json_metadata = JSON.parse(post['json_metadata']);
-			var tags = json_metadata['tags']
-			var postGenre = tags[1];
-			if(postGenre == genrePicked) {
-				postsToDisplay.push(post);
-			}
-		}
-		this.setState({postsToDisplay: postsToDisplay})
+   		this.setState({ genre: genrePicked })
+   		this.getPostsByGenre(genrePicked)
 	
    }
 
 	render() {
+		    const { node, open } = this.state
 		return (
 			<div className="listOfPosts">
 				<Feed>
-				{this.state.postsToDisplay.map((elem, i) => {
+				{this.state.posts.map((elem, i) => {
 					var body = elem['posts'];
 					var imageUrl = "";
 
@@ -134,7 +126,7 @@ getPostsByFilter() {
 					} 
  						imageUrl = this.state.postsObj[elem['author']]
  					 return (
-						<Feed.Event className="feed">
+						<Feed.Event >
 					      <Feed.Label>
 					      	<img className="imageA" src={imageUrl}/>
 					      </Feed.Label>
@@ -148,11 +140,13 @@ getPostsByFilter() {
 			     		   <Feed.Date><p>Posted { time }</p></Feed.Date>
 					        </Feed.Extra>
 					      </Feed.Content>
-					    </Feed.Event>	
 
+					    </Feed.Event>	
 					 	)
 				})}		
 				</Feed>
+					{this.state.open? <Button primary attached='bottom' className="morePosts" onClick={this.loadMorePosts}>More Posts</Button> : <h3 className="noMorePosts">No More Posts</h3>}
+
 		</div>
 	)
 	

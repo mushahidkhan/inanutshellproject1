@@ -53,7 +53,7 @@ class MainPage extends Component {
 
 		return (
 			<div>
-			<HeaderComponent userInfo={this.props.location.userInfo} />
+			<HeaderComponent userInfo={this.props.location.userInfo} className="header"/>
 			<div className="mainPage">
 			  <Grid stackable>
 			    <Grid.Row columns={3}>
@@ -67,7 +67,6 @@ class MainPage extends Component {
 			      </Grid.Column>
 			    </Grid.Row>
 			  </Grid>
-
 				</div>
 			 </div>
 

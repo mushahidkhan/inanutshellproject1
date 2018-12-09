@@ -9,8 +9,12 @@
 	width: inherit;
 }
 
-.options{
+.options {
 	margin-left: 5px;
 	width: inherit;
 
+}
+
+.header{
+	position: fixed !important;
 }

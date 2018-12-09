@@ -14,9 +14,18 @@
 	height: 35px !important;
 }
 
+.morePosts{
+	border-top-right-radius: 5px !important;
+	border-top-left-radius: 5px !important;
+	border-bottom-left-radius: 5px !important;
+	border-bottom-right-radius: 5px !important;
+}
 
-
-
+.d{
+	color: black !important;
+	height: 5px;
+	width: inherit;
+}
 .contentParent{
 	max-width: 90% !important;
   }
@@ -34,4 +43,6 @@ p{
 
 }
 
- 
+.noMorePosts{
+	text-align: center;
+}
