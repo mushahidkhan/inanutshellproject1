@@ -13,7 +13,8 @@ h3{
 
 .menuClass{
 	    border-bottom: 1px solid #DDDDDD !important;
-	    margin-bottom: 12px !important; 
+	    margin-bottom: 12px !important;
+	    background: white !important; 
 }
 
 .loginAndSignUp {

@@ -99,7 +99,7 @@ app.post('/postContent', verifyToken, (req, res) => {
           auth['username'], 
           auth['username'] + postTitle, 
           postTitle, 
-          postContent, {tags:["inANSTest", bookTitle]}, (error, results) => {
+          postContent, {tags:["mushposts", "leadershiplearns"]}, (error, results) => {
             console.log(results)
             if(!error) {
               res.json({ result: "success" })

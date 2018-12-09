@@ -160,7 +160,7 @@ componentWillReceiveProps(newProps) {
 					} 
  						imageUrl = this.state.postsObj[elem['author']]
  					 return (
-						<Feed.Event >
+						<Feed.Event className="feedEvent" >
 					      <Feed.Label>
 					      	<img className="imageA" src={imageUrl}/>
 					      </Feed.Label>

@@ -1,4 +1,6 @@
-
+body{
+	background: #f5f7fa;
+}
 
 .postsArea {
 	padding-right: 10px;
@@ -15,6 +17,14 @@
 
 }
 
+.genreDropDownArea{
+	padding-left: 10px ;
+	margin-bottom: 10px;
+}
 .header{
 	position: fixed !important;
+}
+
+.mainPage{
+	background: #f5f7fa;
 }

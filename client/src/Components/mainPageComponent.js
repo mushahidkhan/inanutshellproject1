@@ -53,13 +53,13 @@ class MainPage extends Component {
 			<HeaderComponent userInfo={this.props.location.userInfo} className="header"/>
 			<div className="mainPage">
 			  <Grid stackable>
-			    <Grid.Row columns={3}>
+			    <Grid.Row >
 			      <Grid.Column>
+			      			    <Grid.Row columns={3}>
+			      <Grid.Column className="genreDropDownArea">
       				<Dropdown onChange={this.onGenreChange} defaultValue={this.state.genreOptions[0].value} search selection options={this.state.genreOptions} className="options"/>
 			      </Grid.Column>
 			    </Grid.Row>
-			    <Grid.Row >
-			      <Grid.Column>
 					 	<ListOfPostsLook userInfo={this.props.location.userInfo} genrePicked={this.state.genrePicked}/>
 			      </Grid.Column>
 			    </Grid.Row>
